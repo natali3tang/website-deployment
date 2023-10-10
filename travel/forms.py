@@ -11,8 +11,8 @@ class DestinationForm(FlaskForm):
   description = TextAreaField('Description', 
             validators=[InputRequired()])
   image = FileField('Destination Image', validators=[
-    FileRequired(message = 'Image cannot be empty'),
-    FileAllowed(ALLOWED_FILE, message='Only supports png, jpg, JPG, PNG')])
+    FileRequired(message='Image cannot be empty'),
+    FileAllowed(ALLOWED_FILE, message='Only supports PNG, JPG, png, jpg')])
   currency = StringField('Currency', validators=[InputRequired()])
   submit = SubmitField("Create")
     

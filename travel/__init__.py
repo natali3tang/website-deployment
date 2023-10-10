@@ -9,11 +9,14 @@ db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
-
     #we use this utility module to display forms quickly
     Bootstrap5(app)
 
-    #A secret key for the session object
+    #this is a much safer way to store passwords
+    Bcrypt(app)
+
+    #a secret key for the session object
+    #(it would be better to use an environment variable here)
     app.secret_key = 'somerandomvalue'
 
     #Configue and initialise DB
@@ -22,15 +25,14 @@ def create_app():
 
     #config upload folder
     UPLOAD_FOLDER = '/static/image'
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER 
     
-
-     #initialise the login manager
+    #initialise the login manager
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-      #create a user loader function takes userid and returns User
+    #create a user loader function takes userid and returns User
     from .models import User  # importing here to avoid circular references
     @login_manager.user_loader
     def load_user(user_id):
@@ -44,7 +46,6 @@ def create_app():
     from . import auth
     app.register_blueprint(auth.authbp)
 
-
     @app.errorhandler(404) 
     # inbuilt function which takes error as parameter 
     def not_found(e): 
@@ -56,4 +57,5 @@ def create_app():
     def get_context():
       year = datetime.datetime.today().year
       return dict(year=year)
+
     return app
